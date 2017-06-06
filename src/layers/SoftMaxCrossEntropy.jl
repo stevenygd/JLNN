@@ -52,6 +52,7 @@ function update(l::SoftMaxCrossEntropyLoss, input_size::Tuple;)
 end
 
 function forward(l::SoftMaxCrossEntropyLoss, Y::Array{Float64,2}, label::Array{Int, 2}; kwargs...)
+    # TODO this is a questionable invariant; [label] ranges from 0 to 9 instead of being one hot
     """
     [label]  label[i] == 1 iff the data is classified to class i
     [y]      final input to the loss layer
