@@ -12,21 +12,19 @@ function testSoftMaxCrossEntropyOneVector(l, x, y, p, loss, dldx; alpha = 1.)
     beforeTest(l)
 
     # Testing forwarding
-    println(forward(l,x,y))
     fl, fp = forward(l,x,y)
     @test_approx_eq fl loss
     @test_approx_eq fp p
 
     # Testing back propagation
-    @test backward(l,y) == dldx
+    @test_approx_eq backward(l,y) dldx
 end
 
 # First Test
 println("Unit test 1...")
 x = [1. 2. 3.; -1. -2. -3.]
 s = e^(-2) + e^(-1) + 1.
-y = zeros(2,1)
-y[:, 1] = [2      ;   1]
+y = [0. 0. 1.; 0. 1. 0.]
 p = [2 ; 0]
 loss = -log([1./s   ;   e^(-1)/s])
 

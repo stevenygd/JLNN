@@ -36,11 +36,11 @@ function benchmmark(smaxcross, smax, cross, batch_size, input_size)
 
   # benchmark for original SoftMaxCrossEntropy
 
-  times[1] = @elapsed forward(smaxcross,x,label)
-  bytes[1] = @allocated forward(smaxcross,x,label)
+  times[1] = @elapsed forward(smaxcross,x,onehot_label)
+  bytes[1] = @allocated forward(smaxcross,x,onehot_label)
 
-  times[2] = @elapsed backward(smaxcross,label)
-  bytes[2] = @allocated backward(smaxcross,label)
+  times[2] = @elapsed backward(smaxcross,onehot_label)
+  bytes[2] = @allocated backward(smaxcross,onehot_label)
 
 
   # benchmark for newly implemented softmax & CrossEntropyLoss
@@ -57,10 +57,10 @@ end
 t = zeros(4)
 b = zeros(4)
 
-num_iter = 50
+num_iter = 500
 
 for i=1:num_iter
-  t_, b_ = benchmmark(smaxcross, smax, cross, 256, 1024)
+  t_, b_ = benchmmark(smaxcross, smax, cross, 10, 1000)
   t.+= t_
   b.+= b_
 end

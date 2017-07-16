@@ -33,25 +33,18 @@ end
 function forward(l::SoftMax, X::Array{Float64,2}; kwargs...)
 
     l.x = X
-    # iterating each row/picture
     l.lexp = exp(l.x)
     l.lsum = sum(l.lexp, 2)
-    # l.y = l.lexp./l.lsum
-    broadcast!(/, l.y, l.lexp, l.lsum)
+    l.y = l.lexp ./ l.lsum
     return l.y
 
 end
 
 function backward(l::SoftMax, DLDY::Array{Float64, 2}; kwargs...)
     # credits: https://stats.stackexchange.com/questions/79454/softmax-layer-in-a-neural-network?newreg=d1e89b443dd346ae8bccaf038a944221
-    m,n =size(l.x)
-    for batch=1:m
-      l.ly = l.y[batch,:]
-      l.jacobian .= -l.ly .* l.ly'
-      l.jacobian[diagind(l.jacobian)] .= l.ly.*(1.0.-l.ly)
-      # # n x 1 = n x n * n x 1
-      l.dldx[batch,:] = l.jacobian * DLDY[batch,:]
-    end
+
+    l.dldx = l.y .* (DLDY .- sum( l.y .* DLDY , 2))
+
     return l.dldx
 
 end
