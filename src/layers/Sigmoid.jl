@@ -35,7 +35,7 @@ function update(l::Sigmoid, input_size::Tuple)
     l.dldy = Array{Float64}(input_size)
 end
 
-function forward(l::Sigmoid, X::Array{Float64}; kwargs...)
+function forward(l::Sigmoid, X::Union{SubArray{Float64},Array{Float64}}; kwargs...)
     if size(l.x) != size(X)
         update(l, size(X))
     end
@@ -44,7 +44,7 @@ function forward(l::Sigmoid, X::Array{Float64}; kwargs...)
     return l.y
 end
 
-function backward(l::Sigmoid, DLDY::Array{Float64}; kwargs...)
+function backward(l::Sigmoid, DLDY::Union{SubArray{Float64},Array{Float64}}; kwargs...)
     @assert size(l.x) == size(DLDY)
     l.dldy = DLDY
     l.dldx = l.y .* (1 - l.y) .* DLDY # d(sigmoid(x))/dx = sigmoid(x)(1 - sigmoid(x))

@@ -27,5 +27,6 @@ module NN
     # optimizers
     include("optimizers/Adam.jl")
     include("optimizers/RMSprop.jl")
-    export AdamOptimizer, RMSPropOptimizer, optimize
+    include("optimizers/SGD.jl")
+    export AdamOptimizer, RMSPropOptimizer, SgdOptimizer, optimize
 end
