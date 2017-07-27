@@ -1,11 +1,11 @@
-abstract ANN
-abstract Layer
-abstract LearnableLayer <: Layer
-abstract Nonlinearity   <: Layer
-abstract LossCriteria   <: Layer
-abstract DataLayer      <: Layer
-abstract RegularizationLayer <: Layer
-abstract UtilityLayer <: Layer
+abstract type ANN end
+abstract type Layer end
+abstract type LearnableLayer <: Layer end
+abstract type Nonlinearity   <: Layer end
+abstract type LossCriteria   <: Layer end
+abstract type DataLayer      <: Layer end
+abstract type RegularizationLayer <: Layer end
+abstract type UtilityLayer <: Layer end
 
 StaticLayer = Union{Nonlinearity, DataLayer, RegularizationLayer, UtilityLayer}
 
