@@ -34,6 +34,7 @@ function forward(l::SoftMax, X::Array{Float64,2}; kwargs...)
 
     l.x = X
     # iterating each row/picture
+    l.x = l.x .- maximum(l.x, 2)
     l.lexp = exp.(l.x)
     l.lsum = sum(l.lexp, 2)
     # l.y = l.lexp./l.lsum
