@@ -63,7 +63,7 @@ function forward(l::SoftMaxCrossEntropyLoss, Y::Array{Float64,2}, label::Array{I
         update(l, size(Y))
     end
     broadcast!(-, l.x, Y, maximum(Y, 2))
-    broadcast!(-, l.y, log(sum(exp(l.x),2)), l.x)
+    broadcast!(-, l.y, log.(sum(exp.(l.x),2)), l.x)
     for i = 1:N
         l.label[i] = label[i] + 1
     end
@@ -103,7 +103,7 @@ function backward(l::SoftMaxCrossEntropyLoss, label::Array{Int, 2};kwargs...)
 
     # local Y = l.x
     # Y = exp(broadcast(+, Y, - maximum(Y,2)))
-    l.dldx = exp(l.x)
+    l.dldx = exp.(l.x)
     broadcast!(/, l.dldx, l.dldx, sum(l.dldx,2))
     broadcast!(-, l.dldx, l.dldx, l.target)
     # return Y .- TAR

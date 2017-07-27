@@ -30,7 +30,7 @@ function forward(l::CrossEntropyLoss, Y::Array{Float64,2}, label::Array{Float64,
   @assert size(Y) == size(label)
   @assert size(l.x) == size(Y)
 
-  l.x = log(Y)
+  l.x = log.(Y)
   l.x = -label.*l.x
   # broadcast!(*, -l.x, label)
   l.loss = sum(l.x,2)
