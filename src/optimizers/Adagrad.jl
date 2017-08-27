@@ -3,6 +3,7 @@ type AdagradOptimizer
     base_lr :: Any
     cache  :: Any
     iter    :: Int
+    epsilon :: Float64
 
     function AdagradOptimizer(net::SequentialNet;  base_lr=(x -> (x<7)?0.01:0.001))
         cache = []
@@ -19,7 +20,7 @@ type AdagradOptimizer
                 push!(cache, c)
              end
          end;
-         return new(net, base_lr, cache, 1)
+         return new(net, base_lr, cache, 1, 1e-10)
      end
  end
 
@@ -42,8 +43,7 @@ type AdagradOptimizer
              g = grad[j]
              @assert size(c) == size(p) && size(c) == size(g)
              c = c + g.^2
-             #                    not sure
-             p = p - this.base_lr(this.iter) * g ./ (sqrt(c) + 1e-10)
+             p = p - this.base_lr(this.iter) * g ./ (sqrt(c) + this.epsilon)
              this.cache[i][j] = c
              param[j] =    p
          end
